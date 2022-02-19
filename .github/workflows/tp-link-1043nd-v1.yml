@@ -51,11 +51,11 @@ jobs:
         cd openwrt
         make image PROFILE="${{ env.PROFILE }}" PACKAGES="${{ env.PACKAGES_TYPE1 }}"
 
-#    - name: Build the image of type 2
-#      id: type2
-#      run: |
-#        cd openwrt
-#        make image PROFILE="${{ env.PROFILE }}" PACKAGES="${{ env.PACKAGES_TYPE2 }}" EXTRA_IMAGE_NAME="MESH"
+    - name: Build the image of type 2
+      id: type2
+      run: |
+        cd openwrt
+        make image PROFILE="${{ env.PROFILE }}" PACKAGES="${{ env.PACKAGES_TYPE2 }}" EXTRA_IMAGE_NAME="MESH"
 
     - name: Packing Artifact
       uses: actions/upload-artifact@v2
