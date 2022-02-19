@@ -59,10 +59,6 @@ jobs:
 #          cp "$f" /mnt/workdir/assets/${{ env.TARGET_FILE }}_${{ env.OPENWRT_VERSION }}_factory.bin \
 #        done
 
-    - name: Zip artefacts #
-      run: |
-        zip -r ${{ env.TARGET_FILE }}_${{ env.OPENWRT_VERSION }}.zip /mnt/workdir/openwrt-imagebuilder*/build_dir/target-*/linux-*/tmp/*
-
 #    - name: Build the image of type 2
 #      id: type2
 #      run: |
@@ -71,43 +67,32 @@ jobs:
 #        mv /mnt/workdir/openwrt-imagebuilder*/build_dir/target-*/linux-${{ env.BOARD }}_${{ env.SUBTARGET }}/tmp/*-sysupgrade.bin.new /mnt/workdir/assets/${{ env.TARGET_FILE }}_${{ env.OPENWRT_VERSION }}_MESH_sysupgrade.bin
 #        mv /mnt/workdir/openwrt-imagebuilder*/build_dir/target-*/linux-${{ env.BOARD }}_${{ env.SUBTARGET }}/tmp/*-factory.bin.new /mnt/workdir/assets/${{ env.TARGET_FILE }}_${{ env.OPENWRT_VERSION }}_MESH_factory.bin
 
-#    - name: Zip artefacts #
-#      run: |
-#        cd /mnt/workdir/assets/
-#        zip -r ${{ env.TARGET_FILE }}_${{ env.OPENWRT_VERSION }}.zip ./*.bin
-#
-#    - name: Create Release
-#      id: create_release
-#      uses: actions/create-release@v1
-#      env:
-#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#      with:
-#        tag_name: ${{ env.OPENWRT_VERSION }}
-#        release_name: ${{env.GITHUB_WORKFLOW}} (${{ env.OPENWRT_VERSION }})
-#        body: |
-#          This release is based on OpenWrt Release ${{ env.OPENWRT_VERSION }}.
-#
-#        draft: false
-#        prerelease: false
-#
-#    - name: Upload type1 Asset
-#      id: upload-release-asset-type1
-#      uses: actions/upload-release-asset@v1
-#      env:
-#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#      with:
-#        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-#        asset_path: /mnt/workdir/assets/${{ env.TARGET_FILE }}_${{ env.OPENWRT_VERSION }}.zip
-#        asset_name: ${{ env.TARGET_FILE }}_${{ env.OPENWRT_VERSION }}.zip
-#        asset_content_type: application/zip
+    - name: Zip artefacts #
+      run: |
+        cd /mnt/workdir/assets/
+        zip -r ${{ env.TARGET_FILE }}_${{ env.OPENWRT_VERSION }}.zip /mnt/workdir/openwrt-imagebuilder*/build_dir/target-*/linux-*/tmp/*.bin
 
-#    - name: Upload type2 Asset
-#      id: upload-release-asset-type2
-#      uses: actions/upload-release-asset@v1
-#      env:
-#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#      with:
-#        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-#        asset_path: /mnt/workdir/assets/${{ env.TARGET_FILE }}_${{ env.OPENWRT_VERSION }}_MESH_sysupgrade.bin
-#        asset_name: ${{ env.TARGET_FILE }}_${{ env.OPENWRT_VERSION }}_MESH_sysupgrade.bin
-#        asset_content_type: application/bin
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ env.OPENWRT_VERSION }}
+        release_name: ${{env.GITHUB_WORKFLOW}} (${{ env.OPENWRT_VERSION }})
+        body: |
+          This release is based on OpenWrt Release ${{ env.OPENWRT_VERSION }}.
+
+        draft: false
+        prerelease: false
+
+    - name: Upload type1 Asset
+      id: upload-release-asset-type1
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+        asset_path: /mnt/workdir/assets/${{ env.TARGET_FILE }}_${{ env.OPENWRT_VERSION }}.zip
+        asset_name: ${{ env.TARGET_FILE }}_${{ env.OPENWRT_VERSION }}.zip
+        asset_content_type: application/zip
