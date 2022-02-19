@@ -60,7 +60,7 @@ jobs:
     - name: Packing Artifact
       uses: actions/upload-artifact@v2
       with:
-         name: ${{GITHUB_WORKFLOW}}-${{ env.RELEASE }}-${{ env.OPENWRT_VERSION }}
+         name: $GITHUB_WORKFLOW-${{ env.RELEASE }}-${{ env.OPENWRT_VERSION }}
          path: |
            /mnt/workdir/openwrt-imagebuilder-${{ env.RELEASE }}-${{ env.BOARD }}-${{ env.SUBTARGET }}.Linux-x86_64/build_dir/target-mips_24kc_musl/linux-${{ env.BOARD }}_${{ env.SUBTARGET }}/tmp/*.bin
 
