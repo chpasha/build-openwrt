@@ -1,0 +1,95 @@
+name: TP-Link WR1043ND-V1
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+env:
+  BOARD: "ath79"
+  SUBTARGET: "generic"
+  PROFILE: "tplink_tl-wr1043nd-v1"
+  TARGET_FILE: "openwrt-ath79-generic-tplink_tl-wr1043nd-v1"
+  PACKAGES_TYPE1: "luci nano -kmod-usb2 -kmod-usb-ledtrig-usbport -luci-proto-ppp -ppp -ppp-mod-pppoe -kmod-pppox -kmod-pppoe -kmod-ppp"
+  PACKAGES_TYPE2: "luci nano wpad-mesh-wolfssl -wpad-basic-wolfssl -kmod-usb2 -kmod-usb-ledtrig-usbport -luci-proto-ppp -ppp -ppp-mod-pppoe -kmod-pppox -kmod-pppoe -kmod-ppp"
+    
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: github.event.repository.owner.id == github.event.sender.id
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+
+    - name: Initialization environment
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run: |
+        sudo mkdir -p /mnt/workdir
+        sudo chown $USER:$GROUPS /mnt/workdir
+
+    - name: Download imagebuilder
+      working-directory: /mnt/workdir
+      run: |
+        curl -O "https://downloads.openwrt.org/snapshots/targets/${{ env.BOARD }}/${{ env.SUBTARGET }}/openwrt-imagebuilder-${{ env.BOARD }}-${{ env.SUBTARGET }}.Linux-x86_64.tar.xz"
+        tar xvaf openwrt-imagebuilder-${{ env.BOARD }}-${{ env.SUBTARGET }}.Linux-x86_64.tar.xz
+        ln -sf /mnt/workdir/openwrt-imagebuilder-${{ env.BOARD }}-${{ env.SUBTARGET }}.Linux-x86_64 $GITHUB_WORKSPACE/openwrt
+ 
+    # Pull the first six letters from the version.buildinfo-file for naming the release e. g. "R16767"
+    - name: Download version info
+      run: |
+        curl -O "https://downloads.openwrt.org/snapshots/targets/${{ env.BOARD }}/${{ env.SUBTARGET }}/version.buildinfo"
+        echo "OPENWRT_VERSION=$(cut -c-6 <<< cat version.buildinfo)" >> $GITHUB_ENV 
+        
+    - name: Build the image of type 1
+      id: type1
+      run: |
+        cd openwrt
+        make image PROFILE="${{ env.PROFILE }}" PACKAGES="${{ env.PACKAGES_TYPE1 }}"
+        mv bin/targets/${{ env.BOARD }}/${{ env.SUBTARGET }}/${{ env.TARGET_FILE }}-squashfs-sysupgrade.bin ${{ env.TARGET_FILE }}_${{ env.OPENWRT_VERSION }}_sysupgrade.bin
+
+    - name: Build the image of type 2
+      id: type2
+      run: |
+        cd openwrt
+        make image PROFILE="${{ env.PROFILE }}" PACKAGES="${{ env.PACKAGES_TYPE2 }}"
+        mv bin/targets/${{ env.BOARD }}/${{ env.SUBTARGET }}/${{ env.TARGET_FILE }}-squashfs-sysupgrade.bin ${{ env.TARGET_FILE }}_${{ env.OPENWRT_VERSION }}_MESH_sysupgrade.bin
+
+
+#    - name: Create Release
+#      id: create_release
+#      uses: actions/create-release@v1
+#      env:
+#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#      with:
+#        tag_name: ${{ env.OPENWRT_VERSION }}
+#        release_name: OpenWrt R2100 (${{ env.OPENWRT_VERSION }})
+#        body: |
+#          This release is based on OpenWrt snapshot ${{ env.OPENWRT_VERSION }}.
+#
+#        draft: false
+#        prerelease: false
+#
+#    - name: Upload type1 Asset
+#      id: upload-release-asset-type1
+#      uses: actions/upload-release-asset@v1
+#      env:
+#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#      with:
+#        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+#        asset_path: openwrt/OpenWrt_R2100_${{ env.OPENWRT_VERSION }}_sysupgrade.bin
+#        asset_name: OpenWrt_R2100_${{ env.OPENWRT_VERSION }}_sysupgrade.bin
+#        asset_content_type: application/bin
+#
+#    - name: Upload type2 Asset
+#      id: upload-release-asset-type2
+#      uses: actions/upload-release-asset@v1
+#      env:
+#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#      with:
+#        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+#        asset_path: openwrt/OpenWrt_R2100_${{ env.OPENWRT_VERSION }}_MESH_sysupgrade.bin
+#        asset_name: OpenWrt_R2100_${{ env.OPENWRT_VERSION }}_MESH_sysupgrade.bin
+#        asset_content_type: application/bin
