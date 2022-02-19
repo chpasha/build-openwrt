@@ -63,7 +63,9 @@ jobs:
 
     - name: Copy artefacts #
       run: |
-         for f in /mnt/workdir/openwrt-imagebuilder*/build_dir/target-*/linux-*/tmp/*.bin; do cp "$f" "/mnt/workdir/assets/${f%.bin}" done
+         for f in /mnt/workdir/openwrt-imagebuilder*/build_dir/target-*/linux-*/tmp/*.bin; do \
+            cp "$f" "/mnt/workdir/assets/${f%.bin}" \ 
+         done;
 
 
     - name: Packing Artifact
