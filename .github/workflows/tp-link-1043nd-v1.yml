@@ -61,10 +61,12 @@ jobs:
 #        mv /mnt/workdir/openwrt-imagebuilder*/build_dir/target-*/linux-${{ env.BOARD }}_${{ env.SUBTARGET }}/tmp/*-sysupgrade.bin.new /mnt/workdir/assets/${{ env.TARGET_FILE }}_${{ env.OPENWRT_VERSION }}_MESH_sysupgrade.bin
 #        mv /mnt/workdir/openwrt-imagebuilder*/build_dir/target-*/linux-${{ env.BOARD }}_${{ env.SUBTARGET }}/tmp/*-factory.bin.new /mnt/workdir/assets/${{ env.TARGET_FILE }}_${{ env.OPENWRT_VERSION }}_MESH_factory.bin
 
-    - name: Zip artefacts #
+    - name: Copy artefacts #
       run: |
-        cd /mnt/workdir/assets/
-        zip ${{ env.TARGET_FILE }}_${{ env.OPENWRT_VERSION }}.zip /mnt/workdir/openwrt-imagebuilder*/build_dir/target-*/linux-*/tmp/*.bin
+#        cd /mnt/workdir/assets/
+#        zip -j ${{ env.TARGET_FILE }}_${{ env.OPENWRT_VERSION }}.zip /mnt/workdir/openwrt-imagebuilder*/build_dir/target-*/linux-*/tmp/*.bin
+         for f in /mnt/workdir/openwrt-imagebuilder*/build_dir/target-*/linux-*/tmp/*.bin; do cp "$f" "/mnt/workdir/assets/${f%.bin}" done
+
 
     - name: Packing Artifact
       uses: actions/upload-artifact@v2
