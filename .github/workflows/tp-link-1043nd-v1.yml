@@ -71,9 +71,9 @@ jobs:
     - name: Packing Artifact
       uses: actions/upload-artifact@v2
       with:
-         name: ${{env.GITHUB_WORKFLOW}}-${{ env.RELEASE }}-${{ env.OPENWRT_VERSION }}
+         name: ${GITHUB_WORKFLOW}-${{ env.RELEASE }}-${{ env.OPENWRT_VERSION }}
          path: |
-           /mnt/workdir/assets/*.zip
+           /mnt/workdir/assets/*.bin
 
 #    - name: Create Release
 #      id: create_release
