@@ -63,8 +63,6 @@ jobs:
 
     - name: Copy artefacts #
       run: |
-#        cd /mnt/workdir/assets/
-#        zip -j ${{ env.TARGET_FILE }}_${{ env.OPENWRT_VERSION }}.zip /mnt/workdir/openwrt-imagebuilder*/build_dir/target-*/linux-*/tmp/*.bin
          for f in /mnt/workdir/openwrt-imagebuilder*/build_dir/target-*/linux-*/tmp/*.bin; do cp "$f" "/mnt/workdir/assets/${f%.bin}" done
 
 
