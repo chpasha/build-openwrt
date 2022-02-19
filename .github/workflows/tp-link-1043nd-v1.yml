@@ -12,8 +12,8 @@ env:
   SUBTARGET: "generic"
   PROFILE: "tplink_tl-wr1043nd-v1"
   TARGET_FILE: "openwrt-ath79-generic-tplink_tl-wr1043nd-v1"
-  PACKAGES_TYPE1: "luci nano -kmod-usb2 -kmod-usb-ledtrig-usbport -luci-proto-ppp -ppp -ppp-mod-pppoe -kmod-pppox -kmod-pppoe -kmod-ppp"
-  PACKAGES_TYPE2: "luci nano wpad-mesh-wolfssl -wpad-basic-wolfssl -kmod-usb2 -kmod-usb-ledtrig-usbport -luci-proto-ppp -ppp -ppp-mod-pppoe -kmod-pppox -kmod-pppoe -kmod-ppp"
+  PACKAGES_TYPE1: "luci mc -luci-proto-ppp -ppp -ppp-mod-pppoe -kmod-pppox -kmod-pppoe -kmod-ppp -nano"
+  PACKAGES_TYPE2: "luci mc wpad-mesh-wolfssl -wpad-basic-wolfssl -luci-proto-ppp -ppp -ppp-mod-pppoe -kmod-pppox -kmod-pppoe -kmod-ppp -nano"
     
 jobs:
   build:
@@ -45,13 +45,13 @@ jobs:
         echo "OPENWRT_VERSION=$(cut -c-6 <<< cat version.buildinfo)" >> $GITHUB_ENV
         
         
-    - name: Build the image of type 1
+    - name: Build standard image
       id: type1
       run: |
         cd openwrt
         make image PROFILE="${{ env.PROFILE }}" PACKAGES="${{ env.PACKAGES_TYPE1 }}"
 
-    - name: Build the image of type 2
+    - name: Build image with mesh support
       id: type2
       run: |
         cd openwrt
