@@ -66,27 +66,34 @@ jobs:
         cd /mnt/workdir/assets/
         zip ${{ env.TARGET_FILE }}_${{ env.OPENWRT_VERSION }}.zip /mnt/workdir/openwrt-imagebuilder*/build_dir/target-*/linux-*/tmp/*.bin
 
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Packing Artifact
+      uses: actions/upload-artifact@v2
       with:
-        tag_name: ${{ env.RELEASE }} (${{ env.OPENWRT_VERSION }})
-        release_name: ${{env.GITHUB_WORKFLOW}} ${{ env.RELEASE }} (${{ env.OPENWRT_VERSION }})
-        body: |
-          This release is based on OpenWrt Release ${{ env.RELEASE }} (${{ env.OPENWRT_VERSION }}).
+         name: ${{env.GITHUB_WORKFLOW}}-${{ env.RELEASE }}-${{ env.OPENWRT_VERSION }}
+         path: |
+           /mnt/workdir/assets/*.zip
 
-        draft: false
-        prerelease: false
-
-    - name: Upload type1 Asset
-      id: upload-release-asset-type1
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-        asset_path: /mnt/workdir/assets/${{ env.TARGET_FILE }}_${{ env.OPENWRT_VERSION }}.zip
-        asset_name: ${{ env.TARGET_FILE }}_${{ env.RELEASE }}_${{ env.OPENWRT_VERSION }}.zip
-        asset_content_type: application/zip
+#    - name: Create Release
+#      id: create_release
+#      uses: actions/create-release@v1
+#      env:
+#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#      with:
+#        tag_name: ${{ env.RELEASE }}_${{ env.OPENWRT_VERSION }}
+#        release_name: ${{env.GITHUB_WORKFLOW}} ${{ env.RELEASE }} (${{ env.OPENWRT_VERSION }})
+#        body: |
+#          This release is based on OpenWrt Release ${{ env.RELEASE }} (${{ env.OPENWRT_VERSION }}).
+#
+#        draft: false
+#        prerelease: false
+#
+#    - name: Upload type1 Asset
+#      id: upload-release-asset-type1
+#      uses: actions/upload-release-asset@v1
+#      env:
+#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#      with:
+#        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+#        asset_path: /mnt/workdir/assets/${{ env.TARGET_FILE }}_${{ env.OPENWRT_VERSION }}.zip
+#        asset_name: ${{ env.TARGET_FILE }}_${{ env.RELEASE }}_${{ env.OPENWRT_VERSION }}.zip
+#        asset_content_type: application/zip
