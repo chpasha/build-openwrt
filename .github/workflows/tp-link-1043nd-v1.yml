@@ -63,14 +63,8 @@ jobs:
 
     - name: Zip artefacts #
       run: |
-        for f in /mnt/workdir/openwrt-imagebuilder*/build_dir/target-*/linux-*/tmp/*-sysupgrade.bin; do \
-          cp "$f" /mnt/workdir/assets/${{ env.TARGET_FILE }}_${{ env.OPENWRT_VERSION }}_sysupgrade.bin \
-        done
-        for f in /mnt/workdir/openwrt-imagebuilder*/build_dir/target-*/linux-*/tmp/*-factory.bin.new; do \
-          cp "$f" /mnt/workdir/assets/${{ env.TARGET_FILE }}_${{ env.OPENWRT_VERSION }}_factory.bin \
-        done
         cd /mnt/workdir/assets/
-        zip -r ${{ env.TARGET_FILE }}_${{ env.OPENWRT_VERSION }}.zip ./*.bin
+        zip ${{ env.TARGET_FILE }}_${{ env.OPENWRT_VERSION }}.zip /mnt/workdir/openwrt-imagebuilder*/build_dir/target-*/linux-*/tmp/*.bin
 
     - name: Create Release
       id: create_release
