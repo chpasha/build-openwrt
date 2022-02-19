@@ -52,7 +52,6 @@ jobs:
       run: |
         cd openwrt
         make image PROFILE="${{ env.PROFILE }}" PACKAGES="${{ env.PACKAGES_TYPE1 }}"
-#       mv bin/targets/${{ env.BOARD }}/${{ env.SUBTARGET }}/${{ env.TARGET_FILE }}-squashfs-sysupgrade.bin ${{ env.TARGET_FILE }}_${{ env.OPENWRT_VERSION }}_sysupgrade.bin
         mv build_dir/target-*/linux-${{ env.BOARD }}_${{ env.SUBTARGET }}/tmp/*-sysupgrade.bin.new /mnt/workdir/assets/${{ env.TARGET_FILE }}_${{ env.OPENWRT_VERSION }}_sysupgrade.bin
         mv build_dir/target-*/linux-${{ env.BOARD }}_${{ env.SUBTARGET }}/tmp/*-factory.bin.new /mnt/workdir/assets/${{ env.TARGET_FILE }}_${{ env.OPENWRT_VERSION }}_factory.bin
 
@@ -61,7 +60,6 @@ jobs:
       run: |
         cd openwrt
         make image PROFILE="${{ env.PROFILE }}" PACKAGES="${{ env.PACKAGES_TYPE2 }}"
-#       mv bin/targets/${{ env.BOARD }}/${{ env.SUBTARGET }}/${{ env.TARGET_FILE }}-squashfs-sysupgrade.bin ${{ env.TARGET_FILE }}_${{ env.OPENWRT_VERSION }}_MESH_sysupgrade.bin
         mv build_dir/target-*/linux-${{ env.BOARD }}_${{ env.SUBTARGET }}/tmp/*-sysupgrade.bin.new /mnt/workdir/assets/${{ env.TARGET_FILE }}_${{ env.OPENWRT_VERSION }}_MESH_sysupgrade.bin
         mv build_dir/target-*/linux-${{ env.BOARD }}_${{ env.SUBTARGET }}/tmp/*-factory.bin.new /mnt/workdir/assets/${{ env.TARGET_FILE }}_${{ env.OPENWRT_VERSION }}_MESH_factory.bin
 
