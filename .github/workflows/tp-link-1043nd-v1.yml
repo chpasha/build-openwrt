@@ -62,9 +62,10 @@ jobs:
 #        mv /mnt/workdir/openwrt-imagebuilder*/build_dir/target-*/linux-${{ env.BOARD }}_${{ env.SUBTARGET }}/tmp/*-factory.bin.new /mnt/workdir/assets/${{ env.TARGET_FILE }}_${{ env.OPENWRT_VERSION }}_MESH_factory.bin
 
     - name: Copy artefacts #
+      working-directory: /mnt/workdir
       run: |
          for f in /mnt/workdir/openwrt-imagebuilder*/build_dir/target-*/linux-*/tmp/*.bin; do \
-            cp "$f" /mnt/workdir/assets/; \ 
+            mv "$f" assets/  \ 
          done;
 
 
