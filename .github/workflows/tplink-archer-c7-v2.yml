@@ -12,11 +12,11 @@ env:
   SUBTARGET: "generic"
   PROFILE: "tplink_archer-c7-v2"
   TARGET_FILE: "openwrt-ath79-generic-tplink_archer-c7-v2"
-  PACKAGES_DUMP_AP: > 
+  PACKAGES_DUMP_AP: >- 
      luci mc ath10k-firmware-qca988x kmod-ath10k
      -luci-proto-ppp -ppp -ppp-mod-pppoe -kmod-pppox -kmod-pppoe -kmod-ppp -nano -ath10k-firmware-qca988x-ct -kmod-ath10k-ct
-  PACKAGES_MASTER: > 
-     luci mc ath10k-firmware-qca988x kmod-ath10k wpad-mesh-wolfssl block-mount kmod-fs-ext4 e2fsprogs fdisk dawn? luci-dawn? 
+  PACKAGES_MASTER: >- 
+     luci mc ath10k-firmware-qca988x kmod-ath10k wpad-mesh-wolfssl kmod-usb-core kmod-usb-storage kmod-usb2 block-mount kmod-fs-ext4 e2fsprogs fdisk dawn luci-app-dawn 
      -wpad-basic-wolfssl -luci-proto-ppp -ppp -ppp-mod-pppoe -kmod-pppox -kmod-pppoe -kmod-ppp -nano -ath10k-firmware-qca988x-ct -kmod-ath10k-ct
     
 jobs:
