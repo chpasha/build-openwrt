@@ -62,7 +62,7 @@ jobs:
       id: type3
       run: |
         cd openwrt
-        make image PROFILE="${{ env.PROFILE }}" PACKAGES="${{ env.PACKAGES_TYPE2 }}" EXTRA_IMAGE_NAME="WDS"
+        make image PROFILE="${{ env.PROFILE }}" PACKAGES="${{ env.PACKAGES_TYPE3 }}" EXTRA_IMAGE_NAME="WDS"
 
     - name: Packing Artifact
       uses: actions/upload-artifact@v2
