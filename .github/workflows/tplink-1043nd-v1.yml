@@ -13,7 +13,7 @@ env:
   PROFILE: "tplink_tl-wr1043nd-v1"
   TARGET_FILE: "openwrt-ath79-generic-tplink_tl-wr1043nd-v1"
   PACKAGES_TYPE1: "luci mc -luci-proto-ppp -ppp -ppp-mod-pppoe -kmod-pppox -kmod-pppoe -kmod-ppp -nano"
-  PACKAGES_TYPE2: "luci mc wpad-mesh-wolfssl -wpad-basic-wolfssl -luci-proto-ppp -ppp -ppp-mod-pppoe -kmod-pppox -kmod-pppoe -kmod-ppp -nano"
+  PACKAGES_TYPE2: "luci mc wpad-mesh-wolfssl -wpad-basic -wpad-basic-wolfssl -luci-proto-ppp -ppp -ppp-mod-pppoe -kmod-pppox -kmod-pppoe -kmod-ppp -nano"
 
 jobs:
   build:
