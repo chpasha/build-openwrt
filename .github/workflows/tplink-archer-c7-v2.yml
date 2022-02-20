@@ -1,0 +1,69 @@
+name: TP-Link Archer C7-V2
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+env:
+  RELEASE: "21.02.1"
+  BOARD: "ath79"
+  SUBTARGET: "generic"
+  PROFILE: "tplink_archer-c7-v2"
+  TARGET_FILE: "openwrt-ath79-generic-tplink_archer-c7-v2"
+  PACKAGES_DUMP_AP: > 
+     luci mc ath10k-firmware-qca988x kmod-ath10k
+     -luci-proto-ppp -ppp -ppp-mod-pppoe -kmod-pppox -kmod-pppoe -kmod-ppp -nano -ath10k-firmware-qca988x-ct -kmod-ath10k-ct
+  PACKAGES_MASTER: > 
+     luci mc ath10k-firmware-qca988x kmod-ath10k wpad-mesh-wolfssl block-mount kmod-fs-ext4 e2fsprogs fdisk dawn? luci-dawn? 
+     -wpad-basic-wolfssl -luci-proto-ppp -ppp -ppp-mod-pppoe -kmod-pppox -kmod-pppoe -kmod-ppp -nano -ath10k-firmware-qca988x-ct -kmod-ath10k-ct
+    
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: github.event.repository.owner.id == github.event.sender.id
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+
+    - name: Initialization environment
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run: |
+        sudo mkdir -p /mnt/workdir
+        sudo chown $USER:$GROUPS /mnt/workdir
+
+    - name: Download imagebuilder
+      working-directory: /mnt/workdir
+      run: |
+        curl -O "https://downloads.openwrt.org/releases/${{ env.RELEASE }}/targets/${{ env.BOARD }}/${{ env.SUBTARGET }}/openwrt-imagebuilder-${{ env.RELEASE }}-${{ env.BOARD }}-${{ env.SUBTARGET }}.Linux-x86_64.tar.xz"
+        tar xvaf openwrt-imagebuilder-${{ env.RELEASE }}-${{ env.BOARD }}-${{ env.SUBTARGET }}.Linux-x86_64.tar.xz
+        ln -sf /mnt/workdir/openwrt-imagebuilder-${{ env.RELEASE }}-${{ env.BOARD }}-${{ env.SUBTARGET }}.Linux-x86_64 $GITHUB_WORKSPACE/openwrt
+ 
+    # Pull the first six letters from the version.buildinfo-file for naming the release e. g. "R16767"
+    - name: Download version info
+      run: |
+        curl -O "https://downloads.openwrt.org/releases/${{ env.RELEASE }}/targets/${{ env.BOARD }}/${{ env.SUBTARGET }}/version.buildinfo"
+        echo "OPENWRT_VERSION=$(cut -c-6 <<< cat version.buildinfo)" >> $GITHUB_ENV
+        
+        
+    - name: Build standard image
+      id: type1
+      run: |
+        cd openwrt
+        make image PROFILE="${{ env.PROFILE }}" PACKAGES="${{ env.PACKAGES_DUMP_AP }}" EXTRA_IMAGE_NAME="DUMP_AP"
+
+    - name: Build image with mesh support
+      id: type2
+      run: |
+        cd openwrt
+        make image PROFILE="${{ env.PROFILE }}" PACKAGES="${{ env.PACKAGES_MASTER }}" EXTRA_IMAGE_NAME="MASTER"
+
+    - name: Packing Artifact
+      uses: actions/upload-artifact@v2
+      with:
+         name: ${{github.workflow}}-${{ env.RELEASE }}-${{ env.OPENWRT_VERSION }}
+         path: |
+           /mnt/workdir/openwrt-imagebuilder-${{ env.RELEASE }}-${{ env.BOARD }}-${{ env.SUBTARGET }}.Linux-x86_64/build_dir/target-mips_24kc_musl/linux-${{ env.BOARD }}_${{ env.SUBTARGET }}/tmp/*.bin
