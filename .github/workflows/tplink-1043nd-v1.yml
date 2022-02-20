@@ -14,7 +14,7 @@ env:
   TARGET_FILE: "openwrt-ath79-generic-tplink_tl-wr1043nd-v1"
   PACKAGES_TYPE1: "luci mc -luci-proto-ppp -ppp -ppp-mod-pppoe -kmod-pppox -kmod-pppoe -kmod-ppp -nano"
   PACKAGES_TYPE2: "luci mc wpad-mesh-wolfssl -wpad-basic-wolfssl -luci-proto-ppp -ppp -ppp-mod-pppoe -kmod-pppox -kmod-pppoe -kmod-ppp -nano"
-  PACKAGES_TYPE3: "luci mc dawn luci-app-dawn -luci-proto-ppp -ppp -ppp-mod-pppoe -kmod-pppox -kmod-pppoe -kmod-ppp -nano"
+  PACKAGES_TYPE3: "luci mc dawn luci-app-dawn -luci-proto-ppp -ppp -ppp-mod-pppoe -kmod-pppox -kmod-pppoe -kmod-ppp -nano -dnsmasq -firewall -ip6tables -odhcp6c -odhcpd-ipv6only"
 
 jobs:
   build:
