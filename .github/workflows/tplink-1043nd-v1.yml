@@ -7,14 +7,13 @@ on:
   workflow_dispatch:
 
 env:
-  RELEASE: "21.02.1"
+  RELEASE: "19.07.8"
   BOARD: "ath79"
   SUBTARGET: "generic"
   PROFILE: "tplink_tl-wr1043nd-v1"
   TARGET_FILE: "openwrt-ath79-generic-tplink_tl-wr1043nd-v1"
   PACKAGES_TYPE1: "luci mc -luci-proto-ppp -ppp -ppp-mod-pppoe -kmod-pppox -kmod-pppoe -kmod-ppp -nano"
   PACKAGES_TYPE2: "luci mc wpad-mesh-wolfssl -wpad-basic-wolfssl -luci-proto-ppp -ppp -ppp-mod-pppoe -kmod-pppox -kmod-pppoe -kmod-ppp -nano"
-  PACKAGES_TYPE3: "luci mc dawn luci-app-dawn -luci-proto-ppp -ppp -ppp-mod-pppoe -kmod-pppox -kmod-pppoe -kmod-ppp -nano -dnsmasq -firewall -ip6tables -odhcp6c -odhcpd-ipv6only"
 
 jobs:
   build:
@@ -57,12 +56,6 @@ jobs:
       run: |
         cd openwrt
         make image PROFILE="${{ env.PROFILE }}" PACKAGES="${{ env.PACKAGES_TYPE2 }}" EXTRA_IMAGE_NAME="MESH"
-
-    - name: Build image with WDS support
-      id: type3
-      run: |
-        cd openwrt
-        make image PROFILE="${{ env.PROFILE }}" PACKAGES="${{ env.PACKAGES_TYPE3 }}" EXTRA_IMAGE_NAME="WDS"
 
     - name: Packing Artifact
       uses: actions/upload-artifact@v2
