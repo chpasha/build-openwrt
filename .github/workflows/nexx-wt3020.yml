@@ -15,7 +15,7 @@ env:
      luci mc
      -luci-proto-ppp -ppp -ppp-mod-pppoe -kmod-pppox -kmod-pppoe -kmod-ppp -nano
   PACKAGES_MASTER: >- 
-     luci mc wpad-mesh-wolfssl kmod-usb2 kmod-usb-ohci kmod-usb-core kmod-usb-storage block-mount kmod-fs-ext4 e2fsprogs fdisk dawn luci-app-dawn
+     luci mc wpad-mesh-wolfssl dawn luci-app-dawn
      -wpad-basic-wolfssl -luci-proto-ppp -ppp -ppp-mod-pppoe -kmod-pppox -kmod-pppoe -kmod-ppp -nano
     
 jobs:
