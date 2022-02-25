@@ -17,6 +17,7 @@ env:
   PACKAGES_MASTER: >- 
      luci mc wpad-mesh-wolfssl dawn luci-app-dawn
      -wpad-basic-wolfssl -luci-proto-ppp -ppp -ppp-mod-pppoe -kmod-pppox -kmod-pppoe -kmod-ppp -nano
+     -dnsmasq -firewall -ip6tables -odhcp6c -odhcpd-ipv6only
     
 jobs:
   build:
