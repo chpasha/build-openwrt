@@ -7,16 +7,16 @@ on:
   workflow_dispatch:
 
 env:
-  RELEASE: "21.02.1"
+  RELEASE: "22.03.2"
   BOARD: "ath79"
   SUBTARGET: "generic"
   PROFILE: "tplink_archer-c7-v2"
   PACKAGES_DUMP_AP: >- 
-     luci mc ath10k-firmware-qca988x kmod-ath10k
-     -luci-proto-ppp -ppp -ppp-mod-pppoe -kmod-pppox -kmod-pppoe -kmod-ppp -nano -ath10k-firmware-qca988x-ct -kmod-ath10k-ct
+     luci mc ath10k-firmware-qca988x kmod-ath10k wpad-wolfssl
+     -wpad-basic-wolfssl -luci-proto-ppp -ppp -ppp-mod-pppoe -kmod-pppox -kmod-pppoe -kmod-ppp -nano -ath10k-firmware-qca988x-ct -kmod-ath10k-ct
   PACKAGES_MASTER: >- 
-     luci mc ath10k-firmware-qca988x kmod-ath10k wpad-mesh-wolfssl kmod-usb-core kmod-usb-storage kmod-usb2 block-mount kmod-fs-ext4 e2fsprogs fdisk dawn luci-app-dawn
-     wireguard-tools kmod-wireguard luci-app-wireguard luci-proto-wireguard
+     luci mc ath10k-firmware-qca988x kmod-ath10k wpad-wolfssl kmod-usb-core kmod-usb-storage kmod-usb2 block-mount kmod-fs-ext4 e2fsprogs fdisk dawn luci-app-dawn
+     wireguard-tools kmod-wireguard luci-app-wireguard luci-proto-wireguard ddns-scripts ddns-scripts_no-ip_com ca-certificates ca-bundle luci-app-ddns qrencode
      -wpad-basic-wolfssl -luci-proto-ppp -ppp -ppp-mod-pppoe -kmod-pppox -kmod-pppoe -kmod-ppp -nano -ath10k-firmware-qca988x-ct -kmod-ath10k-ct
     
 jobs:
