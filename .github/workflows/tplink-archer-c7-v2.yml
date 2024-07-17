@@ -49,17 +49,17 @@ jobs:
         echo "OPENWRT_VERSION=$(cut -c-6 <<< cat version.buildinfo)" >> $GITHUB_ENV
         
         
-    - name: Build standard image
+    - name: Build dump ap image
       id: type1
       run: |
         cd openwrt
-        make image PROFILE="${{ env.PROFILE }}" PACKAGES="${{ env.PACKAGES_DUMP_AP }}" EXTRA_IMAGE_NAME="DUMP_AP"
+        make image PROFILE="${{ env.PROFILE }}" PACKAGES="${{ env.PACKAGES_DUMP_AP }}" EXTRA_IMAGE_NAME="DUMP_AP" BIN_DIR="dump_ap"
 
-    - name: Build image with mesh support
+    - name: Build main router image
       id: type2
       run: |
         cd openwrt
-        make image PROFILE="${{ env.PROFILE }}" PACKAGES="${{ env.PACKAGES_MASTER }}" EXTRA_IMAGE_NAME="MASTER"
+        make image PROFILE="${{ env.PROFILE }}" PACKAGES="${{ env.PACKAGES_MASTER }}" EXTRA_IMAGE_NAME="MASTER" BIN_DIR="master"
 
     - name: Packing Artifact
       uses: actions/upload-artifact@v2
