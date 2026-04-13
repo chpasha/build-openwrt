@@ -7,6 +7,7 @@ mtd netifd nftables odhcp6c odhcpd-ipv6only opkg ppp ppp-mod-pppoe procd-ujail u
 -wpad-basic-mbedtls kmod-mt7915e kmod-mt7981-firmware mt7981-wo-firmware luci luci-app-attendedsysupgrade
 mc iperf3 libiperf3 bind-dig curl jq
 wireguard-tools kmod-wireguard luci-proto-wireguard
+openvpn-openssl
 luci-proto-openfortivpn openfortivpn
 ddns-scripts ca-certificates luci-app-ddns qrencode
 wpad-mbedtls dawn luci-app-dawn fping kmod-batman-adv luci-proto-batman-adv batctl-full
